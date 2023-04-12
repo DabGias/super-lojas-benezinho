@@ -32,21 +32,15 @@ public class Categoria {
     @Column(name = "nome_categoria")
     private String nome;
 
-    @ManyToMany(mappedBy = "categorias")
-    @OrderBy("nome asc")
-    private Set<Produto> produtos = new LinkedHashSet<>();
-
     public Categoria() {}
 
-    public Categoria(Long id, String nome, Set<Produto> produtos) {
+    public Categoria(Long id, String nome) {
         this.id = id;
         this.nome = nome;
-        this.produtos = produtos;
     }
 
-    public Categoria(String nome, Set<Produto> produtos) {
+    public Categoria(String nome) {
         this.nome = nome;
-        this.produtos = produtos;
     }
 
     public Long getId() {
@@ -63,14 +57,6 @@ public class Categoria {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Set<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(Set<Produto> produtos) {
-        this.produtos = produtos;
     }
 
     @Override

@@ -24,20 +24,6 @@ public class Produto {
     @Column(name = "nome_produto")
     private String nome;
 
-    @ManyToOne(
-            fetch = FetchType.LAZY,
-            cascade = { CascadeType.PERSIST, CascadeType.MERGE }
-    )
-    @JoinColumn(
-            name = "id_pedido",
-            referencedColumnName = "id_pedido",
-            foreignKey = @ForeignKey(
-                    name = "fk_tb_pedido",
-                    value = ConstraintMode.CONSTRAINT
-            )
-    )
-    private Pedido pedido;
-
     @ManyToMany
     @JoinTable(
             name = "tb_produto_categoria",
@@ -64,29 +50,25 @@ public class Produto {
 
     public Produto() {}
 
-    public Produto(Long id, String nome, Pedido pedido, Set<Categoria> categorias) {
+    public Produto(Long id, String nome, Set<Categoria> categorias) {
         this.id = id;
         this.nome = nome;
-        this.pedido = pedido;
         this.categorias = categorias;
     }
 
-    public Produto(String nome, Pedido pedido, Set<Categoria> categorias) {
+    public Produto(String nome, Set<Categoria> categorias) {
         this.nome = nome;
-        this.pedido = pedido;
         this.categorias = categorias;
     }
 
     public Produto addCategoria(Categoria c) {
         this.getCategorias().add(c);
-        c.getProdutos().add(this);
 
         return this;
     }
 
     public Produto rmvCategoria(Categoria c) {
         this.getCategorias().remove(c);
-        c.getProdutos().remove(this);
 
         return this;
     }
@@ -107,14 +89,6 @@ public class Produto {
         this.nome = nome;
     }
 
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
-    }
-
     public Set<Categoria> getCategorias() {
         return categorias;
     }
@@ -124,7 +98,6 @@ public class Produto {
         final StringBuilder sb = new StringBuilder("Produto {");
         sb.append(" id = ").append(id);
         sb.append(", nome = '").append(nome).append('\'');
-        sb.append(", pedido = ").append(pedido);
         sb.append(", categorias = ").append(categorias);
         sb.append(" }");
 
