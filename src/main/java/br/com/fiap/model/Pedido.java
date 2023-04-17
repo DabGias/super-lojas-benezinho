@@ -43,7 +43,20 @@ public class Pedido {
     )
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "pedido")
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    @JoinTable(
+            name = "tb_produto_pedido",
+            foreignKey = @ForeignKey(
+                    name = "fk_pedido_produto",
+                    value = ConstraintMode.CONSTRAINT
+            )
+    )
     private Set<Produto> produtos = new LinkedHashSet<>();
 
     public Pedido() {}
@@ -63,14 +76,12 @@ public class Pedido {
 
     public Pedido addProduto(Produto p) {
         this.getProdutos().add(p);
-        p.setPedido(this);
 
         return this;
     }
 
     public Pedido rmvProduto(Produto p) {
         this.getProdutos().remove(p);
-        p.setPedido(null);
 
         return this;
     }
