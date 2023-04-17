@@ -38,17 +38,36 @@ public class Unidade {
     )
     private Unidade sede;
 
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    @JoinColumn(
+            name = "id_funcionario_chefe",
+            referencedColumnName = "id_funcionario",
+            foreignKey = @ForeignKey(
+                    name = "fk_chefe_unidade",
+                    value = ConstraintMode.CONSTRAINT
+            )
+    )
+    private Funcionario chefe;
+
     public Unidade() {}
 
-    public Unidade(Long id, String nome, Unidade sede) {
+    public Unidade(Long id, String nome, Unidade sede, Funcionario chefe) {
         this.id = id;
         this.nome = nome;
         this.sede = sede;
+        this.chefe = chefe;
     }
 
-    public Unidade(String nome, Unidade sede) {
+    public Unidade(String nome, Unidade sede, Funcionario chefe) {
         this.nome = nome;
         this.sede = sede;
+        this.chefe = chefe;
     }
 
     public Long getId() {
@@ -73,6 +92,14 @@ public class Unidade {
 
     public void setSede(Unidade sede) {
         this.sede = sede;
+    }
+
+    public Funcionario getChefe() {
+        return chefe;
+    }
+
+    public void setChefe(Funcionario chefe) {
+        this.chefe = chefe;
     }
 
     @Override

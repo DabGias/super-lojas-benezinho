@@ -41,44 +41,50 @@ public class Main {
         Unidade sede = new Unidade();
         sede.setSede(null);
         sede.setNome("Unidade Brasil");
+        sede.setChefe(MANAGER.find(Funcionario.class, 1));
 
         Unidade filialSP = new Unidade();
         filialSP.setSede(sede);
         filialSP.setNome("São Paulo");
+        filialSP.setChefe(MANAGER.find(Funcionario.class, 2));
 
         Unidade filialVilaMariana = new Unidade();
         filialVilaMariana.setNome("Vila Mariana");
         filialVilaMariana.setSede(filialSP);
+        filialVilaMariana.setChefe(MANAGER.find(Funcionario.class, 3));
 
         Unidade filialSantana = new Unidade();
-        filialVilaMariana.setNome("Santana");
-        filialVilaMariana.setSede(filialSP);
+        filialSantana.setNome("Santana");
+        filialSantana.setSede(filialSP);
+        filialSantana.setChefe(MANAGER.find(Funcionario.class, 3));
 
         Unidade filialSantoAmaro = new Unidade();
-        filialVilaMariana.setNome("Santo Amaro");
-        filialVilaMariana.setSede(filialSP);
+        filialSantoAmaro.setNome("Santo Amaro");
+        filialSantoAmaro.setSede(filialSP);
+        filialSantoAmaro.setChefe(MANAGER.find(Funcionario.class, 3));
 
         Funcionario gabriel = new Funcionario();
         gabriel.setMatricula("123456789");
-        gabriel.addUnidade(MANAGER.find(Unidade.class, 1));
-        gabriel.addUnidade(MANAGER.find(Unidade.class, 2));
 
         Funcionario prof = new Funcionario();
         prof.setMatricula("21773");
-        prof.addUnidade(MANAGER.find(Unidade.class, 1));
 
         Funcionario ricardo = new Funcionario();
         ricardo.setMatricula("987654321");
-        ricardo.addUnidade(MANAGER.find(Unidade.class, 1));
 
         MANAGER.getTransaction().begin();
         MANAGER.persist(eletronicos);
         MANAGER.persist(mobile);
         MANAGER.persist(prodt);
         MANAGER.persist(pedido);
-        Arrays.asList(sede, filialSP, filialVilaMariana).forEach(MANAGER::persist);
         Arrays.asList(gabriel, prof, ricardo).forEach(MANAGER::persist);
+        Arrays.asList(sede, filialSP, filialVilaMariana, filialSantana, filialSantoAmaro).forEach(MANAGER::persist);
         MANAGER.getTransaction().commit();
+
+        gabriel.addUnidade(MANAGER.find(Unidade.class, 1));
+        gabriel.addUnidade(MANAGER.find(Unidade.class, 2));
+        prof.addUnidade(MANAGER.find(Unidade.class, 1));
+        ricardo.addUnidade(MANAGER.find(Unidade.class, 1));
 
         Pedido pedidoFindId = findById(1L);
         List<?> pedidos = findAll();
