@@ -1,5 +1,6 @@
 package br.com.fiap.model;
 
+import br.com.fiap.pessoa.model.PF;
 import jakarta.persistence.*;
 
 import java.util.Collections;
@@ -34,6 +35,23 @@ public class Funcionario {
     @Column(name = "matricula_funcionario")
     private String matricula;
 
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    @JoinColumn(
+            name = "id_pessoa",
+            referencedColumnName = "id_pessoa",
+            foreignKey = @ForeignKey(
+                    name = "fk_tb_pessoa",
+                    value = ConstraintMode.CONSTRAINT
+            )
+    )
+    private PF pessoa;
+
     @ManyToMany
     @JoinTable(
             name = "tb_funcionario_unidade",
@@ -60,14 +78,16 @@ public class Funcionario {
 
     public Funcionario() {}
 
-    public Funcionario(Long id, String matricula, Set<Unidade> unidades) {
+    public Funcionario(Long id, String matricula, PF pessoa, Set<Unidade> unidades) {
         this.id = id;
         this.matricula = matricula;
+        this.pessoa = pessoa;
         this.unidades = unidades;
     }
 
-    public Funcionario(String matricula, Set<Unidade> unidades) {
+    public Funcionario(String matricula, PF pessoa, Set<Unidade> unidades) {
         this.matricula = matricula;
+        this.pessoa = pessoa;
         this.unidades = unidades;
     }
 
@@ -99,8 +119,16 @@ public class Funcionario {
         this.matricula = matricula;
     }
 
-    public List<Unidade> getUnidades() {
-        return Collections.unmodifiableList(this.unidades.stream().toList());
+    public PF getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(PF pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public Set<Unidade> getUnidades() {
+        return unidades;
     }
 
     @Override
@@ -108,6 +136,7 @@ public class Funcionario {
         final StringBuilder sb = new StringBuilder("Funcionario {");
         sb.append(" id = ").append(id);
         sb.append(", matricula = '").append(matricula).append('\'');
+        sb.append(", pessoa = '").append(pessoa).append('\'');
         sb.append(", unidades = ").append(unidades);
         sb.append('}');
 

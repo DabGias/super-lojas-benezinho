@@ -1,6 +1,7 @@
 package br.com.fiap;
 
 import br.com.fiap.model.*;
+import br.com.fiap.pessoa.model.PF;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -66,8 +67,14 @@ public class Main {
         Funcionario gabriel = new Funcionario();
         gabriel.setMatricula("123456789");
 
+        PF bene = new PF();
+        bene.setCpf("123456789");
+        bene.setNome("Benefrancis do Nascimento");
+        bene.setDtNascimento(LocalDate.of(1977, 3, 8));
+
         Funcionario prof = new Funcionario();
         prof.setMatricula("21773");
+        prof.setPessoa(bene);
 
         Funcionario ricardo = new Funcionario();
         ricardo.setMatricula("987654321");
@@ -86,11 +93,8 @@ public class Main {
         prof.addUnidade(MANAGER.find(Unidade.class, 1));
         ricardo.addUnidade(MANAGER.find(Unidade.class, 1));
 
-        Pedido pedidoFindId = findById(1L);
-        List<?> pedidos = findAll();
-
-        System.out.println(pedidoFindId);
-        System.out.println(pedidos);
+        System.out.println(findById(1L));
+        System.out.println(findAll());
 
         MANAGER.close();
         FACTORY.close();
